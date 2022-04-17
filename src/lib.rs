@@ -36,10 +36,7 @@
 use blend::{Blend, runtime::Instance};
 use bevy_app::prelude::*;
 use bevy_asset::{AddAsset, AssetLoader, LoadContext, LoadedAsset};
-use bevy_render::{
-    mesh::{Indices, Mesh},
-    pipeline::PrimitiveTopology,
-};
+use bevy_render::mesh::{Indices, Mesh, PrimitiveTopology};
 use bevy_utils::BoxedFuture;
 
 /// Takes a .blend file location and a mesh name and generates
@@ -56,7 +53,7 @@ macro_rules! blender_mesh {
 pub struct BlenderPlugin;
 
 impl Plugin for BlenderPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         app.init_asset_loader::<BlenderLoader>();
     }
 }
@@ -220,9 +217,9 @@ fn instance_to_mesh(instance: Instance) -> anyhow::Result<Mesh> {
     // Create Bevy mesh
     let mut mesh = Mesh::new(PrimitiveTopology::TriangleList);
     mesh.set_indices(Some(Indices::U32(indices)));
-    mesh.set_attribute(Mesh::ATTRIBUTE_POSITION, positions);
-    mesh.set_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
-    mesh.set_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
+    mesh.insert_attribute(Mesh::ATTRIBUTE_POSITION, positions);
+    mesh.insert_attribute(Mesh::ATTRIBUTE_NORMAL, normals);
+    mesh.insert_attribute(Mesh::ATTRIBUTE_UV_0, uvs);
 
     // Return Bevy mesh
     Ok(mesh)
